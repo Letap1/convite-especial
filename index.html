@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convite Especial ❤️</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.phone-container {
+    width: 360px;
+    height: 700px;
+    background: linear-gradient(180deg, #d32f2f 0%, #8e0000 100%);
+    border-radius: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 8px solid #222;
+}
+
+.phone-container::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    width: 120px;
+    height: 25px;
+    background-color: #222;
+    border-radius: 15px;
+    z-index: 10;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.emoji {
+    font-size: 70px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.35rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}
+
+button,
+.btn {
+    background-color: #fff;
+    color: #d32f2f;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.option-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.option {
+    background: rgba(255,255,255,0.95);
+    color: #b71c1c;
+    border: 3px solid transparent;
+    padding: 13px 8px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.option:hover {
+    transform: scale(1.03);
+}
+
+.option.selected {
+    background: #ffebee;
+    border-color: #fff;
+    transform: scale(1.04);
+}
+
+input[type="date"],
+input[type="time"] {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 15px;
+    margin: 8px 0;
+    font-size: 1rem;
+    outline: none;
+}
+
+.next-btn {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.confirmation {
+    background: rgba(0,0,0,0.18);
+    padding: 18px;
+    border-radius: 20px;
+    width: 100%;
+    text-align: left;
+}
+
+.confirmation p {
+    margin-bottom: 10px;
+}
+
+.confirmation strong {
+    color: #ffe082;
+}
+
+.heart {
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.small {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone-container">
+
+    <!-- TELA 1 -->
+    <div class="screen" id="screen1">
+
+        <div class="emoji heart">❤️</div>
+
+        <h2>Convite Especial</h2>
+
+        <p>
+            Gatinha, tenho um convite muito especial
+            para você...
+        </p>
+
+        <p>
+            Quer sair comigo? 😏
+        </p>
+
+        <div class="btn-group">
+            <button onclick="aceitar()">SIM ❤️</button>
+            <button id="naoBtn" onclick="recusar()">NÃO 😢</button>
+        </div>
+
+        <p id="mensagemNao" class="small"></p>
+
+    </div>
+
+
+    <!-- TELA 2 - DATA E HORA -->
+    <div class="screen hidden" id="screen2">
+
+        <div class="emoji">📅</div>
+
+        <h2>Quando você está livre?</h2>
+
+        <p>
+            Escolhe uma data e um horário para nosso encontro ❤️
+        </p>
+
+        <input type="date" id="data">
+
+        <input type="time" id="hora">
+
+        <button class="next-btn" onclick="salvarData()">
+            CONTINUAR ❤️
+        </button>
+
+    </div>
+
+
+    <!-- TELA 3 - COMIDA -->
+    <div class="screen hidden" id="screen3">
+
+        <div class="emoji">🍽️</div>
+
+        <h2>Tá afim de comer o quê?</h2>
+
+        <p>Você escolhe, gatinha 😏</p>
+
+        <div class="option-grid">
+
+            <button class="option" onclick="selecionarComida(this, 'Pizza')">
+                🍕 Pizza
+            </button>
+
+            <button class="option" onclick="selecionarComida(this, 'Hambúrguer')">
+                🍔 Hambúrguer
+            </button>
+
+            <button class="option" onclick="selecionarComida(this, 'Sushi')">
+                🍣 Sushi
+            </button>
+
+            <button class="option" onclick="selecionarComida(this, 'Massas')">
+                🍝 Massas
+            </button>
+
+            <button class="option" onclick="selecionarComida(this, 'Crepe')">
+                🥞 Crepe
+            </button>
+
+        </div>
+
+        <button class="next-btn" onclick="irAtividade()">
+            CONTINUAR ❤️
+        </button>
+
+    </div>
+
+
+    <!-- TELA 4 - ATIVIDADE -->
+    <div class="screen hidden" id="screen4">
+
+        <div class="emoji">🥰</div>
+
+        <h2>O que vamos fazer?</h2>
+
+        <p>
+            Escolhe o nosso rolê ❤️
+        </p>
+
+        <div class="option-grid">
+
+            <button class="option" onclick="selecionarAtividade(this, 'Correr')">
+                🏃 Correr
+            </button>
+
+            <button class="option" onclick="selecionarAtividade(this, 'Cinema')">
+                🎬 Cinema
+            </button>
+
+            <button class="option" onclick="selecionarAtividade(this, 'Barzinho')">
+                🍻 Barzinho
+            </button>
+
+            <button class="option" onclick="selecionarAtividade(this, 'Tomar um vinho')">
+                🍷 Tomar um vinho
+            </button>
+
+        </div>
+
+        <button class="next-btn" onclick="confirmar()">
+            CONFIRMAR ❤️
+        </button>
+
+    </div>
+
+
+    <!-- TELA FINAL -->
+    <div class="screen hidden" id="screen5">
+
+        <div class="emoji heart">🥰</div>
+
+        <h2>Confirmado, gatinha! ❤️</h2>
+
+        <p>
+            Nosso encontro está marcado!
+        </p>
+
+        <div class="confirmation">
+
+            <p>
+                📅 <strong>Data:</strong>
+                <span id="finalData"></span>
+            </p>
+
+            <p>
+                ⏰ <strong>Horário:</strong>
+                <span id="finalHora"></span>
+            </p>
+
+            <p>
+                🍽️ <strong>Comida:</strong>
+                <span id="finalComida"></span>
+            </p>
+
+            <p>
+                ❤️ <strong>Rolê:</strong>
+                <span id="finalAtividade"></span>
+            </p>
+
+        </div>
+
+        <p class="small">
+            Agora não tem como fugir 😏❤️
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let dataEscolhida = "";
+let horaEscolhida = "";
+let comidaEscolhida = "";
+let atividadeEscolhida = "";
+
+
+/* TELA 1 */
+
+function aceitar() {
+
+    document.getElementById("screen1").classList.add("hidden");
+    document.getElementById("screen2").classList.remove("hidden");
+
+}
+
+
+/* BOTÃO NÃO */
+
+function recusar() {
+
+    const mensagens = [
+        "Tem certeza? 🥺",
+        "Pensa mais um pouquinho... ❤️",
+        "Você apertou errado, né? 😏",
+        "Vou perguntar de novo... 😂",
+        "Não aceito esse não! ❤️"
+    ];
+
+    const mensagem =
+        mensagens[Math.floor(Math.random() * mensagens.length)];
+
+    document.getElementById("mensagemNao").innerText = mensagem;
+
+}
+
+
+/* DATA E HORA */
+
+function salvarData() {
+
+    const data = document.getElementById("data").value;
+    const hora = document.getElementById("hora").value;
+
+    if (!data || !hora) {
+
+        alert("Escolhe a data e o horário primeiro, gatinha ❤️");
+
+        return;
+    }
+
+    dataEscolhida = data;
+    horaEscolhida = hora;
+
+    document.getElementById("screen2").classList.add("hidden");
+    document.getElementById("screen3").classList.remove("hidden");
+
+}
+
+
+/* COMIDA */
+
+function selecionarComida(botao, comida) {
+
+    document
+        .querySelectorAll("#screen3 .option")
+        .forEach(btn => btn.classList.remove("selected"));
+
+    botao.classList.add("selected");
+
+    comidaEscolhida = comida;
+
+}
+
+
+/* IR PARA ATIVIDADE */
+
+function irAtividade() {
+
+    if (!comidaEscolhida) {
+
+        alert("Escolhe o que vamos comer primeiro 😏🍕");
+
+        return;
+    }
+
+    document.getElementById("screen3").classList.add("hidden");
+    document.getElementById("screen4").classList.remove("hidden");
+
+}
+
+
+/* ATIVIDADE */
+
+function selecionarAtividade(botao, atividade) {
+
+    document
+        .querySelectorAll("#screen4 .option")
+        .forEach(btn => btn.classList.remove("selected"));
+
+    botao.classList.add("selected");
+
+    atividadeEscolhida = atividade;
+
+}
+
+
+/* CONFIRMAÇÃO */
+
+function confirmar() {
+
+    if (!atividadeEscolhida) {
+
+        alert("Escolhe o que vamos fazer ❤️");
+
+        return;
+    }
+
+    const dataFormatada =
+        new Date(dataEscolhida + "T00:00:00")
+        .toLocaleDateString("pt-BR");
+
+    document.getElementById("finalData").innerText =
+        dataFormatada;
+
+    document.getElementById("finalHora").innerText =
+        horaEscolhida;
+
+    document.getElementById("finalComida").innerText =
+        comidaEscolhida;
+
+    document.getElementById("finalAtividade").innerText =
+        atividadeEscolhida;
+
+    document.getElementById("screen4").classList.add("hidden");
+    document.getElementById("screen5").classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
