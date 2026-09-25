@@ -14,11 +14,12 @@
 }
 
 body {
-    background-color: #121212;
+    background: #121212;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .phone-container {
@@ -43,7 +44,7 @@ body {
     top: 10px;
     width: 120px;
     height: 25px;
-    background-color: #222;
+    background: #222;
     border-radius: 15px;
     z-index: 10;
 }
@@ -69,6 +70,16 @@ body {
     margin-bottom: 20px;
 }
 
+.heart {
+    animation: heartbeat 1.2s infinite;
+}
+
+h1 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+
 h2 {
     font-size: 1.35rem;
     margin-bottom: 15px;
@@ -83,6 +94,11 @@ p {
     margin-bottom: 15px;
 }
 
+.highlight {
+    font-size: 1.15rem;
+    font-weight: bold;
+}
+
 .btn-group {
     display: flex;
     gap: 15px;
@@ -90,11 +106,11 @@ p {
     position: relative;
     width: 100%;
     justify-content: center;
+    min-height: 50px;
 }
 
-button,
-.btn {
-    background-color: #fff;
+button {
+    background: white;
     color: #d32f2f;
     border: none;
     padding: 12px 24px;
@@ -108,6 +124,10 @@ button,
 
 button:hover {
     transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
 }
 
 .option-grid {
@@ -127,17 +147,17 @@ button:hover {
     font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.option:hover {
-    transform: scale(1.03);
 }
 
 .option.selected {
     background: #ffebee;
-    border-color: #fff;
+    border: 3px solid #ffd54f;
     transform: scale(1.04);
+}
+
+.next-btn {
+    margin-top: 20px;
+    width: 100%;
 }
 
 input[type="date"],
@@ -151,17 +171,13 @@ input[type="time"] {
     outline: none;
 }
 
-.next-btn {
-    margin-top: 20px;
-    width: 100%;
-}
-
 .confirmation {
     background: rgba(0,0,0,0.18);
     padding: 18px;
     border-radius: 20px;
     width: 100%;
     text-align: left;
+    margin-top: 10px;
 }
 
 .confirmation p {
@@ -172,20 +188,57 @@ input[type="time"] {
     color: #ffe082;
 }
 
-.heart {
-    animation: pulse 1.2s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-    100% { transform: scale(1); }
-}
-
 .small {
     font-size: 0.8rem;
-    opacity: 0.8;
+    opacity: 0.85;
     margin-top: 15px;
+}
+
+.heart-fall {
+    position: absolute;
+    top: -50px;
+    animation: fall linear forwards;
+    pointer-events: none;
+    z-index: 20;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.18);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    75% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(750px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .phone-container {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+    }
 }
 </style>
 </head>
@@ -194,25 +247,35 @@ input[type="time"] {
 
 <div class="phone-container">
 
-    <!-- TELA 1 -->
+    <!-- ==========================================
+         TELA 1 - CONVITE
+    =========================================== -->
+
     <div class="screen" id="screen1">
 
         <div class="emoji heart">❤️</div>
 
-        <h2>Convite Especial</h2>
+        <h1>Convite Especial</h1>
 
         <p>
             Gatinha, tenho um convite muito especial
             para você...
         </p>
 
-        <p>
-            Quer sair comigo? 😏
+        <p class="highlight">
+            Quer sair comigo? 😏❤️
         </p>
 
         <div class="btn-group">
-            <button onclick="aceitar()">SIM ❤️</button>
-            <button id="naoBtn" onclick="recusar()">NÃO 😢</button>
+
+            <button onclick="aceitar()">
+                SIM ❤️
+            </button>
+
+            <button id="naoBtn" onclick="recusar()">
+                NÃO 😢
+            </button>
+
         </div>
 
         <p id="mensagemNao" class="small"></p>
@@ -220,7 +283,10 @@ input[type="time"] {
     </div>
 
 
-    <!-- TELA 2 - DATA E HORA -->
+    <!-- ==========================================
+         TELA 2 - DATA E HORA
+    =========================================== -->
+
     <div class="screen hidden" id="screen2">
 
         <div class="emoji">📅</div>
@@ -228,61 +294,97 @@ input[type="time"] {
         <h2>Quando você está livre?</h2>
 
         <p>
-            Escolhe uma data e um horário para nosso encontro ❤️
+            Escolhe uma data e um horário
+            para nosso encontro ❤️
         </p>
 
-        <input type="date" id="data">
+        <input
+            type="date"
+            id="data"
+        >
 
-        <input type="time" id="hora">
+        <input
+            type="time"
+            id="hora"
+        >
 
-        <button class="next-btn" onclick="salvarData()">
+        <button
+            class="next-btn"
+            onclick="salvarData()"
+        >
             CONTINUAR ❤️
         </button>
 
     </div>
 
 
-    <!-- TELA 3 - COMIDA -->
+    <!-- ==========================================
+         TELA 3 - COMIDA
+    =========================================== -->
+
     <div class="screen hidden" id="screen3">
 
         <div class="emoji">🍽️</div>
 
         <h2>Tá afim de comer o quê?</h2>
 
-        <p>Você escolhe, gatinha 😏</p>
+        <p>
+            Você escolhe, gatinha 😏
+        </p>
 
         <div class="option-grid">
 
-            <button class="option" onclick="selecionarComida(this, 'Pizza')">
+            <button
+                class="option"
+                onclick="selecionarComida(this, 'Pizza')"
+            >
                 🍕 Pizza
             </button>
 
-            <button class="option" onclick="selecionarComida(this, 'Hambúrguer')">
+            <button
+                class="option"
+                onclick="selecionarComida(this, 'Hambúrguer')"
+            >
                 🍔 Hambúrguer
             </button>
 
-            <button class="option" onclick="selecionarComida(this, 'Sushi')">
+            <button
+                class="option"
+                onclick="selecionarComida(this, 'Sushi')"
+            >
                 🍣 Sushi
             </button>
 
-            <button class="option" onclick="selecionarComida(this, 'Massas')">
+            <button
+                class="option"
+                onclick="selecionarComida(this, 'Massas')"
+            >
                 🍝 Massas
             </button>
 
-            <button class="option" onclick="selecionarComida(this, 'Crepe')">
+            <button
+                class="option"
+                onclick="selecionarComida(this, 'Crepe')"
+            >
                 🥞 Crepe
             </button>
 
         </div>
 
-        <button class="next-btn" onclick="irAtividade()">
+        <button
+            class="next-btn"
+            onclick="irAtividade()"
+        >
             CONTINUAR ❤️
         </button>
 
     </div>
 
 
-    <!-- TELA 4 - ATIVIDADE -->
+    <!-- ==========================================
+         TELA 4 - ATIVIDADE
+    =========================================== -->
+
     <div class="screen hidden" id="screen4">
 
         <div class="emoji">🥰</div>
@@ -295,37 +397,59 @@ input[type="time"] {
 
         <div class="option-grid">
 
-            <button class="option" onclick="selecionarAtividade(this, 'Correr')">
+            <button
+                class="option"
+                onclick="selecionarAtividade(this, 'Correr')"
+            >
                 🏃 Correr
             </button>
 
-            <button class="option" onclick="selecionarAtividade(this, 'Cinema')">
+            <button
+                class="option"
+                onclick="selecionarAtividade(this, 'Cinema')"
+            >
                 🎬 Cinema
             </button>
 
-            <button class="option" onclick="selecionarAtividade(this, 'Barzinho')">
+            <button
+                class="option"
+                onclick="selecionarAtividade(this, 'Barzinho')"
+            >
                 🍻 Barzinho
             </button>
 
-            <button class="option" onclick="selecionarAtividade(this, 'Tomar um vinho')">
+            <button
+                class="option"
+                onclick="selecionarAtividade(this, 'Tomar um vinho')"
+            >
                 🍷 Tomar um vinho
             </button>
 
         </div>
 
-        <button class="next-btn" onclick="confirmar()">
+        <button
+            class="next-btn"
+            onclick="confirmar()"
+        >
             CONFIRMAR ❤️
         </button>
 
     </div>
 
 
-    <!-- TELA FINAL -->
+    <!-- ==========================================
+         TELA 5 - CONFIRMAÇÃO
+    =========================================== -->
+
     <div class="screen hidden" id="screen5">
 
-        <div class="emoji heart">🥰</div>
+        <div class="emoji heart">
+            🥰
+        </div>
 
-        <h2>Confirmado, gatinha! ❤️</h2>
+        <h2>
+            Confirmado, gatinha! ❤️
+        </h2>
 
         <p>
             Nosso encontro está marcado!
@@ -334,22 +458,26 @@ input[type="time"] {
         <div class="confirmation">
 
             <p>
-                📅 <strong>Data:</strong>
+                📅
+                <strong>Data:</strong>
                 <span id="finalData"></span>
             </p>
 
             <p>
-                ⏰ <strong>Horário:</strong>
+                ⏰
+                <strong>Horário:</strong>
                 <span id="finalHora"></span>
             </p>
 
             <p>
-                🍽️ <strong>Comida:</strong>
+                🍽️
+                <strong>Comida:</strong>
                 <span id="finalComida"></span>
             </p>
 
             <p>
-                ❤️ <strong>Rolê:</strong>
+                ❤️
+                <strong>Rolê:</strong>
                 <span id="finalAtividade"></span>
             </p>
 
@@ -359,6 +487,10 @@ input[type="time"] {
             Agora não tem como fugir 😏❤️
         </p>
 
+        <p class="small">
+            💌 Preparando a confirmação...
+        </p>
+
     </div>
 
 </div>
@@ -366,72 +498,129 @@ input[type="time"] {
 
 <script>
 
+/* ==========================================
+   VARIÁVEIS
+========================================== */
+
 let dataEscolhida = "";
 let horaEscolhida = "";
 let comidaEscolhida = "";
 let atividadeEscolhida = "";
 
 
-/* TELA 1 */
+/* ==========================================
+   SEU WHATSAPP
+========================================== */
+
+const seuNumero = "5561992686319";
+
+
+/* ==========================================
+   TELA INICIAL
+========================================== */
 
 function aceitar() {
 
-    document.getElementById("screen1").classList.add("hidden");
-    document.getElementById("screen2").classList.remove("hidden");
+    document
+        .getElementById("screen1")
+        .classList.add("hidden");
+
+    document
+        .getElementById("screen2")
+        .classList.remove("hidden");
 
 }
 
 
-/* BOTÃO NÃO */
+/* ==========================================
+   BOTÃO NÃO
+========================================== */
 
 function recusar() {
 
     const mensagens = [
-        "Tem certeza? 🥺",
-        "Pensa mais um pouquinho... ❤️",
-        "Você apertou errado, né? 😏",
-        "Vou perguntar de novo... 😂",
-        "Não aceito esse não! ❤️"
+
+        "Tem certeza? 🥺❤️",
+
+        "Pensa mais um pouquinho... 😏",
+
+        "Você apertou errado, né? 😂",
+
+        "Vou perguntar de novo... ❤️",
+
+        "Esse botão não parece muito convincente 😂",
+
+        "Acho que você quis apertar SIM 😌❤️"
+
     ];
 
     const mensagem =
-        mensagens[Math.floor(Math.random() * mensagens.length)];
+        mensagens[
+            Math.floor(
+                Math.random() * mensagens.length
+            )
+        ];
 
-    document.getElementById("mensagemNao").innerText = mensagem;
+    document
+        .getElementById("mensagemNao")
+        .innerText = mensagem;
 
 }
 
 
-/* DATA E HORA */
+/* ==========================================
+   DATA E HORA
+========================================== */
 
 function salvarData() {
 
-    const data = document.getElementById("data").value;
-    const hora = document.getElementById("hora").value;
+    const data =
+        document.getElementById("data").value;
+
+    const hora =
+        document.getElementById("hora").value;
+
 
     if (!data || !hora) {
 
-        alert("Escolhe a data e o horário primeiro, gatinha ❤️");
+        alert(
+            "Escolhe a data e o horário primeiro, gatinha ❤️"
+        );
 
         return;
     }
 
+
     dataEscolhida = data;
+
     horaEscolhida = hora;
 
-    document.getElementById("screen2").classList.add("hidden");
-    document.getElementById("screen3").classList.remove("hidden");
+
+    document
+        .getElementById("screen2")
+        .classList.add("hidden");
+
+    document
+        .getElementById("screen3")
+        .classList.remove("hidden");
 
 }
 
 
-/* COMIDA */
+/* ==========================================
+   ESCOLHER COMIDA
+========================================== */
 
 function selecionarComida(botao, comida) {
 
     document
         .querySelectorAll("#screen3 .option")
-        .forEach(btn => btn.classList.remove("selected"));
+        .forEach(btn => {
+
+            btn.classList.remove("selected");
+
+        });
+
 
     botao.classList.add("selected");
 
@@ -440,30 +629,47 @@ function selecionarComida(botao, comida) {
 }
 
 
-/* IR PARA ATIVIDADE */
+/* ==========================================
+   IR PARA ATIVIDADE
+========================================== */
 
 function irAtividade() {
 
     if (!comidaEscolhida) {
 
-        alert("Escolhe o que vamos comer primeiro 😏🍕");
+        alert(
+            "Escolhe o que vamos comer primeiro 😏🍕"
+        );
 
         return;
     }
 
-    document.getElementById("screen3").classList.add("hidden");
-    document.getElementById("screen4").classList.remove("hidden");
+
+    document
+        .getElementById("screen3")
+        .classList.add("hidden");
+
+    document
+        .getElementById("screen4")
+        .classList.remove("hidden");
 
 }
 
 
-/* ATIVIDADE */
+/* ==========================================
+   ESCOLHER ATIVIDADE
+========================================== */
 
 function selecionarAtividade(botao, atividade) {
 
     document
         .querySelectorAll("#screen4 .option")
-        .forEach(btn => btn.classList.remove("selected"));
+        .forEach(btn => {
+
+            btn.classList.remove("selected");
+
+        });
+
 
     botao.classList.add("selected");
 
@@ -472,35 +678,161 @@ function selecionarAtividade(botao, atividade) {
 }
 
 
-/* CONFIRMAÇÃO */
+/* ==========================================
+   CONFIRMAR ENCONTRO
+========================================== */
 
 function confirmar() {
 
     if (!atividadeEscolhida) {
 
-        alert("Escolhe o que vamos fazer ❤️");
+        alert(
+            "Escolhe o que vamos fazer ❤️"
+        );
 
         return;
     }
 
+
+    /* Formata a data */
+
     const dataFormatada =
-        new Date(dataEscolhida + "T00:00:00")
-        .toLocaleDateString("pt-BR");
+        new Date(
+            dataEscolhida + "T00:00:00"
+        ).toLocaleDateString(
+            "pt-BR"
+        );
 
-    document.getElementById("finalData").innerText =
-        dataFormatada;
 
-    document.getElementById("finalHora").innerText =
-        horaEscolhida;
+    /* Coloca as informações na tela final */
 
-    document.getElementById("finalComida").innerText =
-        comidaEscolhida;
+    document
+        .getElementById("finalData")
+        .innerText = dataFormatada;
 
-    document.getElementById("finalAtividade").innerText =
-        atividadeEscolhida;
+    document
+        .getElementById("finalHora")
+        .innerText = horaEscolhida;
 
-    document.getElementById("screen4").classList.add("hidden");
-    document.getElementById("screen5").classList.remove("hidden");
+    document
+        .getElementById("finalComida")
+        .innerText = comidaEscolhida;
+
+    document
+        .getElementById("finalAtividade")
+        .innerText = atividadeEscolhida;
+
+
+    /* ==========================================
+       MENSAGEM DO WHATSAPP
+    ========================================== */
+
+    const mensagem =
+
+`❤️ NOVO ENCONTRO CONFIRMADO! ❤️
+
+Gatinha confirmou o nosso encontro! 😏❤️
+
+📅 Data: ${dataFormatada}
+⏰ Horário: ${horaEscolhida}
+🍽️ Comida: ${comidaEscolhida}
+❤️ Rolê: ${atividadeEscolhida}
+
+Agora não tem como fugir 😂❤️`;
+
+
+    /* ==========================================
+       LINK DO WHATSAPP
+    ========================================== */
+
+    const whatsappURL =
+        "https://wa.me/" +
+        seuNumero +
+        "?text=" +
+        encodeURIComponent(mensagem);
+
+
+    /* ==========================================
+       MOSTRA A TELA FINAL
+    ========================================== */
+
+    document
+        .getElementById("screen4")
+        .classList.add("hidden");
+
+    document
+        .getElementById("screen5")
+        .classList.remove("hidden");
+
+
+    /* ==========================================
+       CORAÇÕES
+    ========================================== */
+
+    criarCoracoes();
+
+
+    /* ==========================================
+       ABRE O WHATSAPP
+    ========================================== */
+
+    setTimeout(function() {
+
+        window.location.href = whatsappURL;
+
+    }, 1200);
+
+}
+
+
+/* ==========================================
+   ANIMAÇÃO DE CORAÇÕES
+========================================== */
+
+function criarCoracoes() {
+
+    for (let i = 0; i < 35; i++) {
+
+        setTimeout(function() {
+
+            const heart =
+                document.createElement("div");
+
+            heart.className = "heart-fall";
+
+            heart.innerHTML =
+                Math.random() > 0.5
+                ? "❤️"
+                : "💖";
+
+
+            heart.style.left =
+                Math.random() * 100 + "%";
+
+
+            heart.style.fontSize =
+                (Math.random() * 20 + 15) + "px";
+
+
+            heart.style.animationDuration =
+                (Math.random() * 3 + 2) + "s";
+
+
+            document
+                .querySelector(".phone-container")
+                .appendChild(heart);
+
+
+            setTimeout(function() {
+
+                heart.remove();
+
+            }, 6000);
+
+
+        }, i * 80);
+
+    }
 
 }
 
